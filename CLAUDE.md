@@ -1,5 +1,3 @@
-# CLAUDE.md
-
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project
@@ -35,3 +33,51 @@ The stack is NumPy (numerical integration, array operations) and Matplotlib (vis
 ## Dependencies
 
 Managed via `requirements.txt`. Key packages: `numpy`, `matplotlib`, `pytest`.
+
+## Development Plan
+
+The project follows a structured 19-step plan across 6 phases. Each step corresponds to one commit.
+
+### Phase 1 — Foundations
+- ✅ Step 1: GitHub repo, `.gitignore`, clone
+- ✅ Step 2: Virtual environment + dependencies
+- ✅ Step 3: Folder structure + `__init__.py`
+- ✅ Step 4: Smoke test + pytest
+- ✅ Step 5: First commit + push
+
+### Phase 2 — Physics
+- Step 6: `DoublePendulum` class with physical parameters
+- Step 7: Equations of motion (Lagrangian → ODEs)
+- Step 8: Unit test — verify ODEs on a limit case
+
+### Phase 3 — Simulation
+- Step 9: Numerical integrator (`solve_ivp`) — defines the data contract
+- Step 10: Total energy calculation
+- Step 11: Energy conservation test
+
+### Phase 4 — Visualization
+- Step 12: Plot angles θ₁(t) and θ₂(t)
+- Step 13: Pendulum animation (GIF)
+- Step 14: Phase space diagram
+
+### Phase 5 — Chaos Analysis
+- Step 15: Sensitivity to initial conditions
+- Step 16: Lyapunov exponent
+- Step 17: Chaos visualization (trajectory divergence)
+
+### Phase 6 — Polish
+- Step 18: Professional README
+- Step 19: Final cleanup + release tag
+
+## Data Contract (established at Step 9)
+
+All analysis routines (Steps 10, 15, 16, 17) consume a `SimulationResult` object returned by the integrator. The integrator must not be called directly by analysis code. This interface is the stable boundary between simulation and analysis.
+
+Expected fields:
+- `t` — 1D array of time points
+- `state` — 2D array of shape `(4, len(t))` with rows `[θ₁, ω₁, θ₂, ω₂]`
+- `energy` — 1D array of total mechanical energy at each time point
+
+## Scope
+
+The intended scope is: solid integrator → trajectory visualization → three chaos diagnostics (sensitivity to initial conditions, Lyapunov exponent, trajectory divergence visualization). Analysis beyond this scope is out of scope for v1.0.
