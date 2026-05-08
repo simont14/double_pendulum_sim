@@ -48,10 +48,10 @@ The project follows a structured 19-step plan across 6 phases. Each step corresp
 ### Phase 2 — Physics
 - ✅ Step 6: `DoublePendulum` class with physical parameters
 - ✅ Step 7: Equations of motion (Lagrangian → ODEs)
-- Step 8: Unit test — verify ODEs on a limit case
+- ✅ Step 8: Unit test — verify ODEs on a limit case
 
 ### Phase 3 — Simulation
-- Step 9: Numerical integrator (`solve_ivp`) — defines the data contract
+- ✅ Step 9: Numerical integrator (`solve_ivp`) — defines the data contract
 - Step 10: Total energy calculation
 - Step 11: Energy conservation test
 
