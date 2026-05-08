@@ -107,4 +107,37 @@ class DoublePendulum:
             "theta2": sol.y[1],
             "omega1": sol.y[2],
             "omega2": sol.y[3],
+            "energy": self.energy(sol.y),
         }
+
+
+    def energy(self, state):
+        """
+        Compute total mechanical energy E = T + V.
+
+        Parameters
+        ----------
+        state : array-like, shape (4,) or (4, N)
+            State vector(s) [theta1, theta2, omega1, omega2].
+
+        Returns
+        -------
+        float or array
+            Total energy at the given state(s).
+        """
+        theta1, theta2, omega1, omega2 = state
+
+        # Énergie cinétique
+        T = (
+            0.5 * (self.m1 + self.m2) * self.l1**2 * omega1**2
+            + 0.5 * self.m2 * self.l2**2 * omega2**2
+            + self.m2 * self.l1 * self.l2 * omega1 * omega2 * np.cos(theta1 - theta2)
+        )
+
+        # Énergie potentielle
+        V = (
+            -self.m1 * self.g * self.l1 * np.cos(theta1)
+            - self.m2 * self.g * (self.l1 * np.cos(theta1) + self.l2 * np.cos(theta2))
+        )
+
+        return T + V

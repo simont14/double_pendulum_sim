@@ -52,8 +52,8 @@ The project follows a structured 19-step plan across 6 phases. Each step corresp
 
 ### Phase 3 — Simulation
 - ✅ Step 9: Numerical integrator (`solve_ivp`) — defines the data contract
-- Step 10: Total energy calculation
-- Step 11: Energy conservation test
+- ✅ Step 10: Total energy calculation
+- ✅ Step 11: Energy conservation test
 
 ### Phase 4 — Visualization
 - Step 12: Plot angles θ₁(t) and θ₂(t)
