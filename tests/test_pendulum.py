@@ -24,3 +24,15 @@ def test_equilibrium_at_rest():
 
     assert abs(derivs[2]) < 1e-10  # alpha1 doit être ~0
     assert abs(derivs[3]) < 1e-10  # alpha2 doit être ~0
+
+
+def test_solve_returns_correct_shape():
+    dp = DoublePendulum()
+    result = dp.solve(t_max=5.0, dt=0.01)
+
+    assert "t"      in result
+    assert "theta1" in result
+    assert "theta2" in result
+    assert "omega1" in result
+    assert "omega2" in result
+    assert len(result["t"]) == 500  # 5.0 / 0.01 = 500 points
