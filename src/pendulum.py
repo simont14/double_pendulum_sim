@@ -1,5 +1,5 @@
 import numpy as np
-
+from scipy.integrate import solve_ivp
 
 class DoublePendulum:
     """Double pendulum system."""
@@ -63,3 +63,48 @@ class DoublePendulum:
         ) / (self.l2 * denom)
 
         return [omega1, omega2, alpha1, alpha2]
+
+
+    def solve(self, t_max=10.0, dt=0.01):
+        """
+        Integrate the equations of motion over time.
+
+        Parameters
+        ----------
+        t_max : float
+            Total simulation time in seconds.
+        dt : float
+            Time step for output (not the integration step).
+
+        Returns
+        -------
+        dict with keys:
+            "t"      : array, shape (N,) — time points
+            "theta1" : array, shape (N,) — angle of first pendulum
+            "theta2" : array, shape (N,) — angle of second pendulum
+            "omega1" : array, shape (N,) — angular velocity of first pendulum
+            "omega2" : array, shape (N,) — angular velocity of second pendulum
+        """
+        t_span = (0.0, t_max)
+        t_eval = np.arange(0.0, t_max, dt)
+
+        sol = solve_ivp(
+            fun=self.equations_of_motion,
+            t_span=t_span,
+            y0=self.state0,
+            method="RK45",
+            t_eval=t_eval,
+            rtol=1e-9,
+            atol=1e-9,
+        )
+
+        if not sol.success:
+            raise RuntimeError(f"Integration failed: {sol.message}")
+
+        return {
+            "t":      sol.t,
+            "theta1": sol.y[0],
+            "theta2": sol.y[1],
+            "omega1": sol.y[2],
+            "omega2": sol.y[3],
+        }
