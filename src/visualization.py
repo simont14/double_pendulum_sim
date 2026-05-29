@@ -154,3 +154,37 @@ def plot_phase_space(result, filename="figures/phase_space.png"):
     plt.savefig(filename, dpi=150)
     plt.close()
     print(f"Figure sauvegardée : {filename}")
+
+
+def plot_sensitivity(t, divergence, epsilon, filename="figures/sensitivity.png"):
+    """
+    Plot trajectory divergence over time (log and linear scales).
+
+    Parameters
+    ----------
+    t : np.ndarray
+        Time array from DoublePendulum.solve().
+    divergence : np.ndarray
+        Distance between two trajectories at each time step.
+    epsilon : float
+        Initial perturbation magnitude (shown in title).
+    filename : str
+        Path to save the figure.
+    """
+    fig, axes = plt.subplots(2, 1, figsize=(10, 7), sharex=True)
+    fig.suptitle(f"Sensibilité aux conditions initiales (ε = {epsilon:.2e})")
+
+    axes[0].semilogy(t, divergence, color="steelblue", linewidth=0.8)
+    axes[0].set_ylabel("Δ(t) — échelle log")
+    axes[0].set_title("Divergence des trajectoires")
+    axes[0].grid(True, alpha=0.3)
+
+    axes[1].plot(t, divergence, color="tomato", linewidth=0.8)
+    axes[1].set_ylabel("Δ(t) — échelle linéaire")
+    axes[1].set_xlabel("Temps (s)")
+    axes[1].grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    plt.savefig(filename, dpi=150)
+    plt.close()
+    print(f"Figure sauvegardée : {filename}")

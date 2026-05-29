@@ -1,5 +1,6 @@
 from src.pendulum import DoublePendulum
 from src.visualization import plot_phase_space
+from src.chaos import trajectory_divergence
 import numpy as np
 
 
@@ -78,3 +79,20 @@ def test_phase_space_plot_runs(tmp_path):
     out = tmp_path / "phase_space.png"
     plot_phase_space(result, filename=str(out))
     assert out.exists()
+
+
+def test_divergence_zero_for_identical_trajectories():
+    dp = DoublePendulum()
+    r = dp.solve(t_max=5.0, dt=0.01)
+    div = trajectory_divergence(r, r)
+    assert np.all(div == 0.0)
+
+
+def test_divergence_grows_in_chaotic_regime():
+    epsilon = 1e-8
+    dp1 = DoublePendulum(theta1_0=2.0, theta2_0=2.0)
+    dp2 = DoublePendulum(theta1_0=2.0 + epsilon, theta2_0=2.0)
+    r1 = dp1.solve(t_max=20.0, dt=0.01)
+    r2 = dp2.solve(t_max=20.0, dt=0.01)
+    div = trajectory_divergence(r1, r2)
+    assert div[-1] / div[1] > 100
