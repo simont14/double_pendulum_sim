@@ -1,4 +1,5 @@
 from src.pendulum import DoublePendulum
+from src.visualization import plot_phase_space
 import numpy as np
 
 
@@ -69,3 +70,11 @@ def test_energy_conservation():
 
     relative_error = np.max(np.abs(E - E0) / np.abs(E0))
     assert relative_error < 1e-6
+
+
+def test_phase_space_plot_runs(tmp_path):
+    dp = DoublePendulum()
+    result = dp.solve(t_max=5.0, dt=0.01)
+    out = tmp_path / "phase_space.png"
+    plot_phase_space(result, filename=str(out))
+    assert out.exists()

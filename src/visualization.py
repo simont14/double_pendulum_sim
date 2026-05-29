@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.animation import FuncAnimation
+from matplotlib.collections import LineCollection
 
 
 def plot_angles(result, filename="figures/angles.png"):
@@ -107,3 +108,49 @@ def animate_pendulum(dp, result, filename="figures/animation.gif", fps=30):
     anim.save(filename, writer="pillow", fps=fps)
     plt.close()
     print(f"Animation sauvegardée : {filename}")
+
+
+def plot_phase_space(result, filename="figures/phase_space.png"):
+    """
+    Plot phase space portraits (ω vs θ) for both pendulum arms.
+
+    Parameters
+    ----------
+    result : dict
+        Output from DoublePendulum.solve().
+    filename : str
+        Path to save the figure.
+    """
+    t      = result["t"]
+    theta1 = (result["state"][0] + np.pi) % (2 * np.pi) - np.pi
+    omega1 = result["state"][2]
+    theta2 = (result["state"][1] + np.pi) % (2 * np.pi) - np.pi
+    omega2 = result["state"][3]
+
+    norm = plt.Normalize(t[0], t[-1])
+    cmap = plt.get_cmap("plasma")
+
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+    fig.suptitle("Espace des phases du double pendule")
+
+    for ax, theta, omega, label in [
+        (axes[0], theta1, omega1, "1"),
+        (axes[1], theta2, omega2, "2"),
+    ]:
+        # Construire les segments pour LineCollection
+        points = np.array([theta, omega]).T.reshape(-1, 1, 2)
+        segments = np.concatenate([points[:-1], points[1:]], axis=1)
+        lc = LineCollection(segments, cmap=cmap, norm=norm, linewidth=0.6, alpha=0.8)
+        lc.set_array(t[:-1])
+        ax.add_collection(lc)
+        ax.autoscale()
+        ax.set_xlabel(f"θ{label} (rad)")
+        ax.set_ylabel(f"ω{label} (rad/s)")
+        ax.set_title(f"Pendule {label}")
+        ax.grid(True, alpha=0.3)
+
+    fig.colorbar(lc, ax=axes, label="Temps (s)", fraction=0.02, pad=0.04)
+
+    plt.savefig(filename, dpi=150)
+    plt.close()
+    print(f"Figure sauvegardée : {filename}")
