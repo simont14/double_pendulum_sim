@@ -188,3 +188,34 @@ def plot_sensitivity(t, divergence, epsilon, filename="figures/sensitivity.png")
     plt.savefig(filename, dpi=150)
     plt.close()
     print(f"Figure sauvegardée : {filename}")
+
+
+def plot_lyapunov(t, lambda_t, lambda_mean, filename="figures/lyapunov.png"):
+    """
+    Plot the running Lyapunov exponent estimate over time.
+
+    Parameters
+    ----------
+    t : np.ndarray
+        Time array (length N-1, skipping t=0).
+    lambda_t : np.ndarray
+        Running MLE estimate at each time step.
+    lambda_mean : float
+        Time-averaged MLE (shown as a dashed reference line).
+    filename : str
+        Path to save the figure.
+    """
+    fig, ax = plt.subplots(figsize=(10, 5))
+    ax.plot(t, lambda_t, color="steelblue", linewidth=0.8, label="λ(t) instantané")
+    ax.axhline(lambda_mean, color="tomato", linewidth=1.5, linestyle="--",
+               label=f"λ moyen = {lambda_mean:.3f} s⁻¹")
+    ax.set_xlabel("Temps (s)")
+    ax.set_ylabel("λ (s⁻¹)")
+    ax.set_title("Exposant de Lyapunov maximal")
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    plt.savefig(filename, dpi=150)
+    plt.close()
+    print(f"Figure sauvegardée : {filename}")
