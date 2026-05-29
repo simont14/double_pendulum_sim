@@ -80,10 +80,8 @@ class DoublePendulum:
         -------
         dict with keys:
             "t"      : array, shape (N,) — time points
-            "theta1" : array, shape (N,) — angle of first pendulum
-            "theta2" : array, shape (N,) — angle of second pendulum
-            "omega1" : array, shape (N,) — angular velocity of first pendulum
-            "omega2" : array, shape (N,) — angular velocity of second pendulum
+            "state"  : array, shape (4, N) — rows [θ₁, θ₂, ω₁, ω₂]
+            "energy" : array, shape (N,) — total mechanical energy
         """
         t_span = (0.0, t_max)
         t_eval = np.arange(0.0, t_max, dt)
@@ -103,10 +101,7 @@ class DoublePendulum:
 
         return {
             "t":      sol.t,
-            "theta1": sol.y[0],
-            "theta2": sol.y[1],
-            "omega1": sol.y[2],
-            "omega2": sol.y[3],
+            "state":  sol.y,
             "energy": self.energy(sol.y),
         }
 

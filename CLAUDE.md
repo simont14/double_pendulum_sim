@@ -75,7 +75,7 @@ All analysis routines (Steps 10, 15, 16, 17) consume a `SimulationResult` object
 
 Expected fields:
 - `t` — 1D array of time points
-- `state` — 2D array of shape `(4, len(t))` with rows `[θ₁, ω₁, θ₂, ω₂]`
+- `state` — 2D array of shape `(4, len(t))` with rows `[θ₁, θ₂, ω₁, ω₂]`
 - `energy` — 1D array of total mechanical energy at each time point
 
 ## Scope

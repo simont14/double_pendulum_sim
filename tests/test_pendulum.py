@@ -31,11 +31,10 @@ def test_solve_returns_correct_shape():
     result = dp.solve(t_max=5.0, dt=0.01)
 
     assert "t"      in result
-    assert "theta1" in result
-    assert "theta2" in result
-    assert "omega1" in result
-    assert "omega2" in result
-    assert len(result["t"]) == 500  # 5.0 / 0.01 = 500 points
+    assert "state"  in result
+    assert "energy" in result
+    assert len(result["t"]) == 500           # 5.0 / 0.01 = 500 points
+    assert result["state"].shape == (4, 500)
 
 
 def test_energy_at_rest_position():
@@ -63,12 +62,7 @@ def test_energy_conservation():
     )
     result = dp.solve(t_max=10.0, dt=0.01)
 
-    states = np.array([
-        result["theta1"],
-        result["theta2"],
-        result["omega1"],
-        result["omega2"],
-    ])
+    states = result["state"]
 
     E0 = dp.energy(states[:, 0])
     E  = dp.energy(states)
