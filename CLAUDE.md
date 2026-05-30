@@ -24,16 +24,17 @@ No build step is required — this is a pure Python project. Activate the virtua
 Current structure:
 
 - `src/pendulum.py` — `DoublePendulum` class: physical parameters, equations of motion, `solve()`, `energy()`
-- `src/visualization.py` — `plot_angles()` (θ₁/θ₂ over time), `animate_pendulum()` (GIF)
-- `tests/` — pytest test suite
+- `src/chaos.py` — `trajectory_divergence()`, `lyapunov_exponent()`
+- `src/visualization.py` — `plot_angles()`, `animate_pendulum()`, `plot_phase_space()`, `plot_sensitivity()`, `plot_lyapunov()`, `plot_chaos_divergence()`
+- `tests/` — pytest test suite (14 tests)
 - `notebooks/run_simulation.py` — demo script: runs a simulation and generates all figures
-- `figures/` — `angles.png`, `animation.gif`
+- `figures/` — `angles.png`, `animation.gif`, `phase_space.png`, `sensitivity.png`, `lyapunov.png`, `chaos_divergence.png`
 
-The stack is NumPy (numerical integration, array operations) and Matplotlib (visualization). Simulation code lives in `src/`; scripts in `notebooks/` import from `src/` and produce figures saved to `figures/`.
+The stack is NumPy (numerical integration, array operations), SciPy (RK45 integrator), and Matplotlib (visualization). Simulation code lives in `src/`; scripts in `notebooks/` import from `src/` and produce figures saved to `figures/`.
 
 ## Dependencies
 
-Managed via `requirements.txt`. Key packages: `numpy`, `matplotlib`, `pillow`, `pytest`.
+Managed via `requirements.txt`. Key packages: `numpy`, `scipy`, `matplotlib`, `pillow`, `pytest`.
 
 ## Development Plan
 
@@ -59,16 +60,16 @@ The project follows a structured 19-step plan across 6 phases. Each step corresp
 ### Phase 4 — Visualization
 - ✅ Step 12: Plot angles θ₁(t) and θ₂(t)
 - ✅ Step 13: Pendulum animation (GIF)
-- Step 14: Phase space diagram
+- ✅ Step 14: Phase space diagram
 
 ### Phase 5 — Chaos Analysis
-- Step 15: Sensitivity to initial conditions
-- Step 16: Lyapunov exponent
-- Step 17: Chaos visualization (trajectory divergence)
+- ✅ Step 15: Sensitivity to initial conditions
+- ✅ Step 16: Lyapunov exponent
+- ✅ Step 17: Chaos visualization (trajectory divergence)
 
 ### Phase 6 — Polish
-- Step 18: Professional README
-- Step 19: Final cleanup + release tag
+- ✅ Step 18: Professional README
+- ✅ Step 19: Final cleanup + release tag
 
 ## Data Contract (established at Step 9)
 
