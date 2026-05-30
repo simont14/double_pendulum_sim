@@ -219,3 +219,59 @@ def plot_lyapunov(t, lambda_t, lambda_mean, filename="figures/lyapunov.png"):
     plt.savefig(filename, dpi=150)
     plt.close()
     print(f"Figure sauvegardée : {filename}")
+
+
+def plot_chaos_divergence(dp, result1, result2, epsilon, filename="figures/chaos_divergence.png"):
+    """
+    Visualize trajectory divergence: angle time series and spatial paths.
+
+    Parameters
+    ----------
+    dp : DoublePendulum
+        Pendulum object (used for l1, l2 to compute Cartesian coordinates).
+    result1, result2 : dict
+        Outputs from DoublePendulum.solve(). result2 starts perturbed by epsilon.
+    epsilon : float
+        Initial perturbation magnitude (shown in title).
+    filename : str
+        Path to save the figure.
+    """
+    t        = result1["t"]
+    theta1_a = (result1["state"][0] + np.pi) % (2 * np.pi) - np.pi
+    theta1_b = (result2["state"][0] + np.pi) % (2 * np.pi) - np.pi
+
+    # Cartesian position of mass 2
+    x2_a = dp.l1 * np.sin(result1["state"][0]) + dp.l2 * np.sin(result1["state"][1])
+    y2_a = -dp.l1 * np.cos(result1["state"][0]) - dp.l2 * np.cos(result1["state"][1])
+    x2_b = dp.l1 * np.sin(result2["state"][0]) + dp.l2 * np.sin(result2["state"][1])
+    y2_b = -dp.l1 * np.cos(result2["state"][0]) - dp.l2 * np.cos(result2["state"][1])
+
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+    fig.suptitle(f"Divergence des trajectoires chaotiques (ε = {epsilon:.2e})")
+
+    # Left: θ₁(t) for both trajectories
+    axes[0].plot(t, np.degrees(theta1_a), color="steelblue", linewidth=0.8,
+                 label="Trajectoire A", alpha=0.9)
+    axes[0].plot(t, np.degrees(theta1_b), color="tomato", linewidth=0.8,
+                 label="Trajectoire B", alpha=0.9)
+    axes[0].set_xlabel("Temps (s)")
+    axes[0].set_ylabel("θ₁ (degrés)")
+    axes[0].set_title("Angle θ₁(t) — divergence temporelle")
+    axes[0].legend()
+    axes[0].grid(True, alpha=0.3)
+
+    # Right: spatial trajectory of mass 2
+    axes[1].plot(x2_a, y2_a, color="steelblue", linewidth=0.5, alpha=0.7, label="Trajectoire A")
+    axes[1].plot(x2_b, y2_b, color="tomato",    linewidth=0.5, alpha=0.7, label="Trajectoire B")
+    axes[1].plot(x2_a[0], y2_a[0], "ko", markersize=5, label="Départ commun")
+    axes[1].set_xlabel("x₂ (m)")
+    axes[1].set_ylabel("y₂ (m)")
+    axes[1].set_title("Trajectoire spatiale de la masse 2")
+    axes[1].set_aspect("equal")
+    axes[1].legend()
+    axes[1].grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    plt.savefig(filename, dpi=150)
+    plt.close()
+    print(f"Figure sauvegardée : {filename}")

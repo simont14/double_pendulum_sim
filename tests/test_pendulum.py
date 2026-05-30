@@ -1,5 +1,5 @@
 from src.pendulum import DoublePendulum
-from src.visualization import plot_phase_space
+from src.visualization import plot_phase_space, plot_chaos_divergence
 from src.chaos import trajectory_divergence, lyapunov_exponent
 import numpy as np
 
@@ -106,6 +106,17 @@ def test_lyapunov_positive_in_chaotic_regime():
     r2 = dp2.solve(t_max=20.0, dt=0.01)
     _, lam = lyapunov_exponent(r1, r2, epsilon)
     assert lam > 0
+
+
+def test_chaos_divergence_plot_runs(tmp_path):
+    epsilon = 1e-8
+    dp1 = DoublePendulum(theta1_0=2.0, theta2_0=2.0)
+    dp2 = DoublePendulum(theta1_0=2.0 + epsilon, theta2_0=2.0)
+    r1 = dp1.solve(t_max=5.0, dt=0.01)
+    r2 = dp2.solve(t_max=5.0, dt=0.01)
+    out = tmp_path / "chaos_divergence.png"
+    plot_chaos_divergence(dp1, r1, r2, epsilon, filename=str(out))
+    assert out.exists()
 
 
 def test_lyapunov_shape():
